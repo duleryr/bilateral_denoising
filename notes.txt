@@ -1,0 +1,4 @@
+http://www.cs.ubc.ca/~sheffa/dgp/student_ppts/BilateralMeshDenoising.pdf
+
+Plusieurs bruits différents
+Plusieurs paramètres d'intensité du bruit
