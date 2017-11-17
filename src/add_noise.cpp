@@ -45,8 +45,8 @@ void random_noise(double first_value, double amplitude ,std::vector<double>& tab
     }
 }
 
-void add_noise(Vertex tab_vertices[], int nb_vertices) {
-
+void add_noise(std::vector<Vertex> tab_vertices) {
+    int nb_vertices = tab_vertices.size();
     std::vector< std::vector<double>> tab_coord;
     tab_coord.push_back(std::vector<double>(nb_vertices));
     tab_coord.push_back(std::vector<double>(nb_vertices));
@@ -68,7 +68,7 @@ void add_noise(Vertex tab_vertices[], int nb_vertices) {
     if (noisename == "gaussien") {
         double deviation[3];
         for (int i = 0; i < 3; i++) {
-            std::cout<< "indiquez l'écart type de la première composante: \n";
+	    std::cout<< "indiquez l'écart type de la composante "<<i<<"\n";
             std::cin >> deviation[i];
             gaussian_noise(0, deviation[i], tab_coord[i], nb_vertices);
         }
