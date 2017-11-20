@@ -3,7 +3,7 @@ CXX=g++
 CXXFLAGS=-Wall -Wextra -std=c++11 -O3
 
 SRCDIR=./src
-CSOURCE=$(SRCDIR)/Face.cpp $(SRCDIR)/Vertex.cpp
+CSOURCE=$(SRCDIR)/Data_structure.cpp $(SRCDIR)/file_stream.cpp $(SRCDIR)/Vertex.cpp
 CSMAIN=$(SRCDIR)/main.cpp
 
 $(PROG): 

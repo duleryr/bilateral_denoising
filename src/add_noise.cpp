@@ -58,7 +58,7 @@ void add_noise(std::vector<Vertex> & tab_vertices) {
             tab_coord[j][i] = tab_vertices[i].Coords[j];
         }
     }
-  
+
     for (int i = 0; i < nb_vertices; i++) {
         std::cout<<tab_coord[0][i]<<" "<<tab_coord[1][i]<<" "<<tab_coord[2][i]<<std::endl;
     }
@@ -66,20 +66,20 @@ void add_noise(std::vector<Vertex> & tab_vertices) {
     std::string noisename;
     std::cout << "indiquez le type de bruit (au choix gaussien, aleatoire): \n";
     std::cin >> noisename;
-  
+
     if (noisename == "gaussien") {
         double deviation[3];
         for (int i = 0; i < 3; i++) {
-	    std::cout<< "indiquez l'écart type de la composante "<<i<<"\n";
+            std::cout<< "indiquez l'écart type de la composante "<<i<<"\n";
             std::cin >> deviation[i];
             gaussian_noise(0, deviation[i], tab_coord[i], nb_vertices);
         }
     } else if (noisename == "aleatoire") {
         double amplitude[3];
         for (int i = 0; i < 3; i++) {
-           std::cout<<"indiquez l'amplitude de la première composante: \n";
-           std::cin >> amplitude[i];
-           random_noise(0, amplitude[i], tab_coord[i], nb_vertices);
+            std::cout<<"indiquez l'amplitude de la première composante: \n";
+            std::cin >> amplitude[i];
+            random_noise(0, amplitude[i], tab_coord[i], nb_vertices);
         }
     } else {
         std::cout<< "bruit non valide"<< std::endl;
