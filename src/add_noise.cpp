@@ -2,7 +2,8 @@
 #include <string>
 #include <random>
 #include <vector>
-#include "write_off.cpp"
+#include "write_file_off.cpp"
+#include "file_stream.h"
 
 double calcul_moyenne(std::vector<double>& tab , int size) {
     double moy = 0;
@@ -90,24 +91,24 @@ void add_noise(std::vector<Vertex> & tab_vertices) {
 
 }
 
-int main(int argc, char **argv) 
-{
-    std::string filename;
-
-    if (argc == 2) {
-        filename = argv[1];
-    } else {
-        std::cout << "Indiquez le nom du fichier que vous voulez parser :\n";
-        std::cin >> filename;
-        std::cout << filename;
-    }
-    
-    /* Structure de données */
-    std::vector<Vertex> tableau_sommets;
-    std::vector<Face> tableau_faces;
-
-    /* Parsing du fichier OFF */
-    parse_file_ngb(filename, tableau_sommets, tableau_faces);  
-
-    write_off(output_filename, tableau_sommets, tableau_faces);
-}
+//int main(int argc, char **argv) 
+//{
+//    std::string filename;
+//
+//    if (argc == 2) {
+//        filename = argv[1];
+//    } else {
+//        std::cout << "Indiquez le nom du fichier que vous voulez parser :\n";
+//        std::cin >> filename;
+//        std::cout << filename;
+//    }
+//    
+//    /* Structure de données */
+//    std::vector<Vertex> tableau_sommets;
+//    std::vector<Face> tableau_faces;
+//
+//    /* Parsing du fichier OFF */
+//    File_stream::parse_file_ngb(filename, tableau_sommets, tableau_faces);  
+//
+//    File_stream::write_file_off(output_filename, tableau_sommets, tableau_faces);
+//}

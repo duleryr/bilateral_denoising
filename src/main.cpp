@@ -5,10 +5,9 @@
 #include <vector>
 #include "Vertex.hpp"
 #include "Face.hpp"
-#include "parse_file_ngb.cpp"
 #include "update_normale.cpp"
 #include "denoise_point.cpp"
-#include "write_off.cpp"
+#include "file_stream.h"
 
 int main(int argc, char **argv) 
 {
@@ -27,7 +26,7 @@ int main(int argc, char **argv)
     std::vector<Face> tableau_faces;
 
     /* Parsing du fichier OFF */
-    parse_file_ngb(filename, tableau_sommets, tableau_faces);  
+    File_stream::parse_file_ngb(filename, tableau_sommets, tableau_faces);  
 
     double sigma_s = 1;
     double sigma_c = 1.5;
@@ -43,7 +42,8 @@ int main(int argc, char **argv)
     std::string output_filename = "../OFF_Files_Noised/" + filename + "_denoised";
 
     /* Ecriture dans le fichier de sortie */
-    write_file_off(output_filename, tableau_sommets, tableau_faces);
+    File_stream::write_file_off(output_filename, tableau_sommets, tableau_faces);
 
+    return 0;
 }
 
