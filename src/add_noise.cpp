@@ -46,7 +46,7 @@ void random_noise(double first_value, double amplitude ,std::vector<double>& tab
     }
 }
 
-void add_noise(std::vector<Vertex> tab_vertices) {
+void add_noise(std::vector<Vertex> & tab_vertices) {
     int nb_vertices = tab_vertices.size();
     std::vector< std::vector<double>> tab_coord;
     tab_coord.push_back(std::vector<double>(nb_vertices));
