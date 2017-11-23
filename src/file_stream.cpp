@@ -10,7 +10,7 @@
 DataStructure File_stream::parse_file_ngb(std::string filename) {
     std::ifstream fichier(filename.c_str(), std::ios::in);
     if(!fichier) {
-        std::cout<<"problème lors de l'ouverture du fichier"<<std::endl;
+        std::cout<<"Erreur lors de l'ouverture du fichier d'entrée"<<std::endl;
         exit(1);
     }
     std::string type_fichier;
@@ -52,7 +52,7 @@ DataStructure File_stream::parse_file_ngb(std::string filename) {
 void File_stream::write_file_off(std::string filename, DataStructure data) {
     std::ofstream fichier(filename.c_str(), std::ios::out | std::ios::trunc);
     if(!fichier) {
-        std::cout<<"problème lors de l'ouverture du fichier"<<std::endl;
+        std::cout<<"Erreur lors de l'ouverture du fichier de sortie"<<std::endl;
         return;
     }
     fichier << "OFF" << std::endl;
