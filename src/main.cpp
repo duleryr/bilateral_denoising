@@ -52,7 +52,9 @@ int main(int argc, char **argv)
     }
 
     /* Structure de données principale */
-    DataStructure data = File_stream::parse_file_ngb(filename);  
+    std::string input_filename = "NGB_Files/" + filename + ".ngb";
+    //TODO A bruiter
+    DataStructure data = File_stream::parse_file_ngb(input_filename);  
 
     double sigma_s = 1;
     double sigma_c = 1.5;
@@ -65,7 +67,7 @@ int main(int argc, char **argv)
         data.update_normals();
     }
 
-    std::string output_filename = "../OFF_Files_Noised/" + filename + "_denoised";
+    std::string output_filename = "OFF_Files_Denoised/" + filename + ".off";
 
     /* Ecriture dans le fichier de sortie */
     File_stream::write_file_off(output_filename, data);
