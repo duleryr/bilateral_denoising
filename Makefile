@@ -9,16 +9,21 @@ CSMAIN=$(SRCDIR)/main.cpp
 $(PROG): 
 	$(CXX) $(CSOURCE) $(CXXFLAGS) $(CSMAIN) -o $@ 
 	
+add_noise:
+	$(CXX) $(CSOURCE) $(CXXFLAGS) $(SRCDIR)/add_noise.cpp -o $@ 
+
 debug:
 	$(CXX) $(CSOURCE) $(CXXFLAGS) -g -pg $(CSMAIN) -o $@ 
 
 doc:
 	pdflatex -output-directory=Documentation/ Documentation/rapport.tex
 
-all: $(PROG) debug doc 
+all: $(PROG) debug doc add_noise
 
 clean :
 	rm -f ./main
+	rm -f ./debug
+	rm -f ./add_noise
 	rm -f Documentation/rapport.aux
 	rm -f Documentation/rapport.log
 	rm -f Documentation/rapport.dvi
