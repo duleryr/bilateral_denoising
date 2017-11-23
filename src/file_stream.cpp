@@ -61,6 +61,6 @@ void File_stream::write_file_off(std::string filename, DataStructure data) {
         fichier << data.vertices[i].coords.x << " " << data.vertices[i].coords.y << " " << data.vertices[i].coords.z << std::endl;
     }
     for (uint i = 0; i < data.faces.size(); i++) {
-        fichier << "3" << data.faces[i].verticesId[0] << data.faces[i].verticesId[1] << data.faces[i].verticesId[2] << std::endl;
+        fichier << "3 " << data.faces[i].verticesId[0]<< " " << data.faces[i].verticesId[1]<< " " << data.faces[i].verticesId[2] << std::endl;
     }
 }
