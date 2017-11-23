@@ -1,5 +1,6 @@
 #include "Data_structure.h"
 #include <vector>
+#include <iostream>
 #include "Vertex.h"
 #include "Face.h"
 #include "Tools.h"
@@ -47,4 +48,11 @@ void DataStructure::update_vertices_normals() {
 
 void DataStructure::update_normals() {
     update_vertices_normals();
+}
+
+void DataStructure::display_vertices() {
+    int nb_vertices = vertices.size();
+    for (int i = 0; i < nb_vertices; i++) {
+        std::cout << vertices[i].coords.x<<" " <<vertices[i].coords.y<<" "<<vertices[i].coords.z<<std::endl;
+    }
 }

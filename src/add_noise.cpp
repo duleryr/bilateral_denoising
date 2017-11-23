@@ -2,8 +2,8 @@
 #include <string>
 #include <random>
 #include <vector>
-#include "write_file_off.cpp"
 #include "file_stream.h"
+#include "Data_structure.h"
 
 double calcul_moyenne(std::vector<double>& tab , int size) {
     double moy = 0;
@@ -47,20 +47,29 @@ void random_noise(double first_value, double amplitude ,std::vector<double>& tab
     }
 }
 
-void add_noise(std::vector<Vertex> & tab_vertices) {
-    int nb_vertices = tab_vertices.size();
+int main(int argc, char **argv) {
+ 
+   std::string filename;
+
+    if (argc == 2) {
+        filename = argv[1];
+    } else {
+        std::cout << "Indiquez le nom du fichier que vous voulez parser :\n";
+        std::cin >> filename;
+        std::cout << filename;
+    }
+
+    std::string input_filename = "OFF_Files/" + filename + ".off";
+    DataStructure DataStruct = File_stream::parse_file_off(input_filename);
+    int nb_vertices = DataStruct.vertices.size();
     std::vector< std::vector<double>> tab_coord;
     tab_coord.push_back(std::vector<double>(nb_vertices));
     tab_coord.push_back(std::vector<double>(nb_vertices));
     tab_coord.push_back(std::vector<double>(nb_vertices));
     for (int i = 0; i < nb_vertices; i++) {
-        for (int j = 0; j < 3; j++) {
-            tab_coord[j][i] = tab_vertices[i].Coords[j];
-        }
-    }
-
-    for (int i = 0; i < nb_vertices; i++) {
-        std::cout<<tab_coord[0][i]<<" "<<tab_coord[1][i]<<" "<<tab_coord[2][i]<<std::endl;
+        tab_coord[0][i] = DataStruct.vertices[i].coords.x;
+        tab_coord[1][i] = DataStruct.vertices[i].coords.y;
+        tab_coord[2][i] = DataStruct.vertices[i].coords.z;
     }
 
     std::string noisename;
@@ -86,29 +95,14 @@ void add_noise(std::vector<Vertex> & tab_vertices) {
     }
 
     for (int i = 0; i < nb_vertices; i++) {
-        std::cout<<tab_coord[0][i]<<" "<<tab_coord[1][i]<<" "<<tab_coord[2][i]<<std::endl;
+        DataStruct.vertices[i].coords.x = tab_coord[0][i];
+        DataStruct.vertices[i].coords.y = tab_coord[1][i];
+        DataStruct.vertices[i].coords.z = tab_coord[2][i];
     }
+    std::string output_filename = "OFF_Files_Noised/" + filename + ".off";
+  
+    File_stream::write_file_off(output_filename, DataStruct);
+
+    return 0;
 
 }
-
-//int main(int argc, char **argv) 
-//{
-//    std::string filename;
-//
-//    if (argc == 2) {
-//        filename = argv[1];
-//    } else {
-//        std::cout << "Indiquez le nom du fichier que vous voulez parser :\n";
-//        std::cin >> filename;
-//        std::cout << filename;
-//    }
-//    
-//    /* Structure de données */
-//    std::vector<Vertex> tableau_sommets;
-//    std::vector<Face> tableau_faces;
-//
-//    /* Parsing du fichier OFF */
-//    File_stream::parse_file_ngb(filename, tableau_sommets, tableau_faces);  
-//
-//    File_stream::write_file_off(output_filename, tableau_sommets, tableau_faces);
-//}

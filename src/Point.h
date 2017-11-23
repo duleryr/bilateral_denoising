@@ -20,12 +20,12 @@ public:
     void operator+=(Point p) {
         this->x += p.x;
         this->y += p.y;
-        this->z += p.y;
+        this->z += p.z;
     }
     void operator-=(Point p) {
         this->x -= p.x;
         this->y -= p.y;
-        this->z -= p.y;
+        this->z -= p.z;
     }
     void operator*=(double d) {
         this->x *= d;

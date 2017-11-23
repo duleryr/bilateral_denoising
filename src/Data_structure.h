@@ -12,6 +12,7 @@ public:
     std::vector<Face> faces;
     DataStructure(std::vector<Vertex> list_vertices, std::vector<Face> list_faces);
     void update_normals();
+    void display_vertices();
 private:
     Vect compute_face_normal(int face_id);
     void update_vertices_normals();

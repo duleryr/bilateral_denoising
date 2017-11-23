@@ -36,6 +36,7 @@ DataStructure File_stream::parse_file_off(std::string filename) {
     std::vector<Face> tableau_faces;
     for (int i = 0; i < nb_faces; i++) {
         Face F;
+        fichier >> tmp;
         fichier >> F.verticesId[0];
         fichier >> F.verticesId[1];
         fichier >> F.verticesId[2];

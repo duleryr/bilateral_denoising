@@ -64,9 +64,12 @@ int main(int argc, char **argv)
     found = filename.find_last_of(".");
     filename = filename.substr(0,found);
     std::cout << filename << std::endl;
+    
+    std::string output_filename = "OFF_Files_Denoised/" + filename + ".off";
 
     /* Structure de données principale */
-    DataStructure data = File_stream::parse_file_off(input_file);  
+    DataStructure data = File_stream::parse_file_off(input_file); 
+    data.display_vertices();
     data.update_normals();
 
     double rau = 2*sigma_c;
@@ -74,11 +77,11 @@ int main(int argc, char **argv)
     for (int j = 0; j < nb_iter; j++) {
         for (uint i = 0; i < data.vertices.size(); i++) {
             denoise_point(data.vertices[i], rau, data, sigma_c, sigma_s);
+	    std::cout<<"\n";
+	    data.display_vertices();
         }
-        data.update_normals();
+	data.update_normals();
     }
-
-    std::string output_filename = "OFF_Files_Denoised/" + filename + ".off";
 
     /* Ecriture dans le fichier de sortie */
     File_stream::write_file_off(output_filename, data);
