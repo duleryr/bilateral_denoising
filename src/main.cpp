@@ -60,8 +60,9 @@ int main(int argc, char **argv)
 
     std::size_t found = input_file.find_last_of("/");
     std::string filename = input_file.substr(found+1);
+    std::cout << filename << std::endl;
     found = filename.find_last_of(".");
-    filename = input_file.substr(found+1);
+    filename = filename.substr(0,found);
     std::cout << filename << std::endl;
 
     /* Structure de données principale */
