@@ -7,7 +7,7 @@
 class File_stream
 {
 public:
-    static DataStructure parse_file_ngb(std::string filename);
+    static DataStructure parse_file_off(std::string filename);
     static void write_file_off(std::string filename, DataStructure data);
 };
 

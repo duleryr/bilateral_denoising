@@ -7,7 +7,7 @@
 #include "Vertex.h"
 #include "Face.h"
 
-DataStructure File_stream::parse_file_ngb(std::string filename) {
+DataStructure File_stream::parse_file_off(std::string filename) {
     std::ifstream fichier(filename.c_str(), std::ios::in);
     if(!fichier) {
         std::cout<<"Erreur lors de l'ouverture du fichier d'entrée"<<std::endl;
@@ -19,6 +19,8 @@ DataStructure File_stream::parse_file_ngb(std::string filename) {
     fichier >> nb_sommets;
     int nb_faces;
     fichier >> nb_faces;
+    int tmp;
+    fichier >> tmp;
 
     std::vector<Vertex> tableau_sommets;
     //on remplit le tableau de sommets avec les coordonnées des sommets et des normales au sommets
@@ -27,9 +29,6 @@ DataStructure File_stream::parse_file_ngb(std::string filename) {
         fichier >> S.coords.x;
         fichier >> S.coords.y;
         fichier >> S.coords.z;
-        fichier >> S.normal.x;
-        fichier >> S.normal.y;
-        fichier >> S.normal.z;
         tableau_sommets.push_back(S);           
     }
 
@@ -40,9 +39,6 @@ DataStructure File_stream::parse_file_ngb(std::string filename) {
         fichier >> F.verticesId[0];
         fichier >> F.verticesId[1];
         fichier >> F.verticesId[2];
-        fichier >> F.neighbourFaces[0];
-        fichier >> F.neighbourFaces[1];
-        fichier >> F.neighbourFaces[2];
         tableau_faces.push_back(F);
     }
 

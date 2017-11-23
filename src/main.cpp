@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <cstddef>
 #include <stdio.h>
 #include <fstream>
 #include <vector>
@@ -41,23 +42,32 @@ void denoise_point(Vertex & V, double rau, DataStructure & data, double sigma_c,
 
 int main(int argc, char **argv) 
 {
-    std::string filename;
-
-    if (argc == 2) {
-        filename = argv[1];
-    } else {
-        std::cout << "Indiquez le nom du fichier que vous voulez parser :\n";
-        std::cin >> filename;
-        std::cout << filename;
-    }
-
-    /* Structure de données principale */
-    std::string input_filename = "NGB_Files/" + filename + ".ngb";
-    //TODO A bruiter
-    DataStructure data = File_stream::parse_file_ngb(input_filename);  
+    std::string input_file;
 
     double sigma_s = 1;
     double sigma_c = 1.5;
+
+    if (argc >= 2) {
+        if (argc == 4) {
+            sigma_s = std::stod(argv[2]);
+            sigma_c = std::stod(argv[3]);
+        }
+        input_file = argv[1];
+    } else {
+        std::cout << "Indiquez le fichier que vous voulez débruiter :\n";
+        std::cin >> input_file;
+    }
+
+    std::size_t found = input_file.find_last_of("/");
+    std::string filename = input_file.substr(found+1);
+    found = filename.find_last_of(".");
+    std::string filename = input_file.substr(found+1);
+    std::cout << filename << std::endl;
+
+    /* Structure de données principale */
+    DataStructure data = File_stream::parse_file_off(input_file);  
+    data.update_normals();
+
     double rau = 2*sigma_c;
     int nb_iter = 1;
     for (int j = 0; j < nb_iter; j++) {
