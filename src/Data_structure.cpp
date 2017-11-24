@@ -42,7 +42,7 @@ void DataStructure::update_vertices_normals() {
                 V.normal += normales_faces[j];
             } 
         }
-        V.normal = Tools::normalize(V.normal);
+        vertices[i].normal = Tools::normalize(V.normal);
     }
 }
 

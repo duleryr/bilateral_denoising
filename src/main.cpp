@@ -44,8 +44,8 @@ int main(int argc, char **argv)
 {
     std::string input_file;
 
-    double sigma_s = 1;
-    double sigma_c = 1.5;
+    double sigma_s = 1.5;
+    double sigma_c = 2;
 
     if (argc >= 2) {
         if (argc == 4) {
@@ -69,7 +69,6 @@ int main(int argc, char **argv)
 
     /* Structure de données principale */
     DataStructure data = File_stream::parse_file_off(input_file); 
-    data.display_vertices();
     data.update_normals();
 
     double rau = 2*sigma_c;
@@ -77,8 +76,6 @@ int main(int argc, char **argv)
     for (int j = 0; j < nb_iter; j++) {
         for (uint i = 0; i < data.vertices.size(); i++) {
             denoise_point(data.vertices[i], rau, data, sigma_c, sigma_s);
-	    std::cout<<"\n";
-	    data.display_vertices();
         }
 	data.update_normals();
     }
