@@ -18,6 +18,7 @@ class Point
             y = ny;
             z = nz;
         }
+        Point(const Point & p) : x(p.x), y(p.y), z(p.z) { }
         void operator+=(Point p) {
             this->x += p.x;
             this->y += p.y;

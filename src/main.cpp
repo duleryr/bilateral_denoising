@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <fstream>
 #include <vector>
+#include "Point.h"
 #include "Tools.h"
 #include "Vertex.h"
 #include "Face.h"
@@ -35,28 +36,28 @@ double compute_sigma_c(std::string type, Vertex V, DataStructure data) {
     return 0.0;
 }
 
-std::vector<Vertex> compute_distance_neighborhood(Vertex V, double rau, const DataStructure data) {
-    std::vector<Vertex> neighborhood;
-    for (uint i = 0; i < data.vertices.size(); i++) {
-        if (!(data.vertices[i] == V)) {
-            double norm = Tools::calcNorm(V.coords - data.vertices[i].coords);
+std::vector<Point> compute_distance_neighborhood(Vertex V, double rau, const std::vector<Point> coords_cpy) {
+    std::vector<Point> neighborhood;
+    for (uint i = 0; i < coords_cpy.size(); i++) {
+        if (!(coords_cpy[i] == V.coords)) {
+            double norm = Tools::calcNorm(V.coords - coords_cpy[i]);
             if (norm < rau) {
-                neighborhood.push_back(data.vertices[i]);
+                neighborhood.push_back(coords_cpy[i]);
             }
         }
     }
     return neighborhood;
 }
 
-void denoise_point(Vertex & V, double rau, DataStructure & data, double sigma_c, double sigma_s) {
-    std::vector<Vertex> neighborhood = compute_distance_neighborhood(V, rau, data);
+void denoise_point(Vertex & V, double rau, std::vector<Point> coords_cpy, double sigma_c, double sigma_s) {
+    std::vector<Point> neighborhood = compute_distance_neighborhood(V, rau, coords_cpy);
     int K = neighborhood.size();
     double sum = 0;
     double normalizer = 0;
     for (int i = 0; i < K; i++) {
         std::cout << "Neighboorhood[i]";
-        neighborhood[i].coords.print();
-        Point dist = V.coords - neighborhood[i].coords;
+        neighborhood[i].print();
+        Point dist = V.coords - neighborhood[i];
         double t = Tools::calcNorm(dist);
         std::cout << "V.normal = ";
         V.normal.print();
@@ -113,6 +114,12 @@ int main(int argc, char **argv)
     data.compute_topology_neighbours(1);
     data.update_normals();
 
+    std::vector<Point> vertices_coords_cpy;
+
+    for (uint i = 0; i < data.vertices.size(); i++) {
+        vertices_coords_cpy.push_back(Point(data.vertices[i].coords));
+    }
+
     std::string calc_sigma_c = "MoyDistVois";
 
     std::cout << "-----------------------------------------" << std::endl;
@@ -127,12 +134,19 @@ int main(int argc, char **argv)
             if (DEBUG_DISTANCES) {
                 std::cout << sigma_c << " ";
             }
-            denoise_point(data.vertices[i], rau, data, sigma_c, sigma_s);
+            denoise_point(data.vertices[i], rau, vertices_coords_cpy, sigma_c, sigma_s);
         }
         data.update_normals();
+
+        for (uint i = 0; i < data.vertices.size(); i++) {
+            vertices_coords_cpy[i] = data.vertices[i].coords;
+        }
     }
 
-    data.display_vertices();
+    if (SHOW_RESULT) {
+        std::cout << "-----Résultats obtenus-----" << std::endl;
+        data.display_vertices();
+    }
 
     /* Ecriture dans le fichier de sortie */
     File_stream::write_file_off(output_filename + calc_sigma_c, data);
