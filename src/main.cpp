@@ -37,6 +37,29 @@ double compute_sigma_c(std::string type, Vertex V, std::vector<Point> vertices_c
     return 0.0;
 }
 
+double compute_sigma_s(std::string type, Vertex V, std::vector<Point> vertices_coords_cpy) {
+    if (type == "MoyDistVois") {
+        std::vector<double> distance;
+        if (DEBUG_DISTANCES) {
+            std::cout << "------- Distances ------- " << std::endl;
+        }
+        for (auto itr = V.neighbours.begin(); itr != V.neighbours.end(); ++itr) {
+            double dist = Tools::calcNorm(V.coords - vertices_coords_cpy[*itr]);
+            if (DEBUG_DISTANCES) {
+                std::cout << "Voisin";
+                vertices_coords_cpy[*itr].print();
+                std::cout << "Point";
+                V.coords.print();
+                std::cout << "Distance : " << dist << std::endl;
+            }
+            distance.push_back(dist);
+        }
+        std::cout << std::endl;
+        return Tools::standard_deviation(distance);
+    }
+    return 0.0;
+}
+
 std::vector<Point> compute_distance_neighborhood(Vertex V, double rau, const std::vector<Point> coords_cpy) {
     std::vector<Point> neighborhood;
     for (uint i = 0; i < coords_cpy.size(); i++) {
@@ -121,7 +144,7 @@ int main(int argc, char **argv)
         vertices_coords_cpy.push_back(Point(data.vertices[i].coords));
     }
 
-    std::string calc_sigma_c = "MoyDistVois";
+    std::string calc_sigma = "MoyDistVois";
 
     std::cout << "-----------------------------------------" << std::endl;
     data.display_vertices();
@@ -130,7 +153,8 @@ int main(int argc, char **argv)
     int nb_iter = 1;
     for (int j = 0; j < nb_iter; j++) {
         for (uint i = 0; i < data.vertices.size(); i++) {
-            sigma_c = compute_sigma_c(calc_sigma_c, data.vertices[i], vertices_coords_cpy);
+            sigma_c = compute_sigma_c(calc_sigma, data.vertices[i], vertices_coords_cpy);
+	    sigma_s = compute_sigma_s(calc_sigma, data.vertices[i], vertices_coords_cpy);
             if (DEBUG_DISTANCES) {
                 std::cout << "sigma_c = " << sigma_c << std::endl;
             }
@@ -150,7 +174,7 @@ int main(int argc, char **argv)
     }
 
     /* Ecriture dans le fichier de sortie */
-    File_stream::write_file_off(output_filename + calc_sigma_c, data);
+    File_stream::write_file_off(output_filename, data);
 
     return 0;
 }

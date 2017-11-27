@@ -35,6 +35,17 @@ public:
         result /= vect.size();
         return result;
     }
+
+    static double standard_deviation(std::vector<double> vect) {
+	double moy_carre = 0.0;
+        for (uint i = 0; i < vect.size(); i++) {
+	    moy_carre += vect[i]*vect[i];
+        }
+        moy_carre /= vect.size();
+	double moy = average(vect);
+        double var = moy_carre - moy*moy;
+	return sqrt(var);
+    }
 };
 
 #endif
