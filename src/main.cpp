@@ -11,19 +11,20 @@
 #include "Data_structure.h"
 #include "file_stream.h"
 
-#define DEBUG_DISTANCES false
+#define DEBUG_DISTANCES true
+#define SHOW_RESULT true
 
-double compute_sigma_c(std::string type, Vertex V, DataStructure data) {
+double compute_sigma_c(std::string type, Vertex V, std::vector<Point> vertices_coords_cpy) {
     if (type == "MoyDistVois") {
         std::vector<double> distance;
         if (DEBUG_DISTANCES) {
             std::cout << "------- Distances ------- " << std::endl;
         }
         for (auto itr = V.neighbours.begin(); itr != V.neighbours.end(); ++itr) {
-            double dist = Tools::calcNorm(V.coords - data.vertices[*itr].coords);
+            double dist = Tools::calcNorm(V.coords - vertices_coords_cpy[*itr]);
             if (DEBUG_DISTANCES) {
                 std::cout << "Voisin";
-                data.vertices[*itr].coords.print();
+                vertices_coords_cpy[*itr].print();
                 std::cout << "Point";
                 V.coords.print();
                 std::cout << "Distance : " << dist << std::endl;
@@ -129,11 +130,11 @@ int main(int argc, char **argv)
     int nb_iter = 1;
     for (int j = 0; j < nb_iter; j++) {
         for (uint i = 0; i < data.vertices.size(); i++) {
-            sigma_c = compute_sigma_c(calc_sigma_c, data.vertices[i], data);
-            double rau = 2*sigma_c;
+            sigma_c = compute_sigma_c(calc_sigma_c, data.vertices[i], vertices_coords_cpy);
             if (DEBUG_DISTANCES) {
-                std::cout << sigma_c << " ";
+                std::cout << "sigma_c = " << sigma_c << std::endl;
             }
+            double rau = 2*sigma_c;
             denoise_point(data.vertices[i], rau, vertices_coords_cpy, sigma_c, sigma_s);
         }
         data.update_normals();

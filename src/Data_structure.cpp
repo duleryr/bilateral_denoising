@@ -51,7 +51,7 @@ void DataStructure::update_normals() {
 }
 
 void DataStructure::compute_topology_neighbours(int k) {
-    for (int i = 0; i < faces.size(); i++) {
+    for (uint i = 0; i < faces.size(); i++) {
         vertices[faces[i].verticesId[0]].neighbours.insert(faces[i].verticesId[1]);
         vertices[faces[i].verticesId[0]].neighbours.insert(faces[i].verticesId[2]);
 
