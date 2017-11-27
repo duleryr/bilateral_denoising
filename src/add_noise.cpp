@@ -99,7 +99,7 @@ int main(int argc, char **argv) {
         DataStruct.vertices[i].coords.y = tab_coord[1][i];
         DataStruct.vertices[i].coords.z = tab_coord[2][i];
     }
-    std::string output_filename = "OFF_Files_Noised/" + filename + ".off";
+    std::string output_filename = "OFF_Files_Noised/" + filename + "_" + noisename + ".off";
   
     File_stream::write_file_off(output_filename, DataStruct);
 

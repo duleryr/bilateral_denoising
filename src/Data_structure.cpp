@@ -18,7 +18,7 @@ Vect DataStructure::compute_face_normal(int face_id) {
     Vertex V2 = vertices[F.verticesId[2]];
     Vect dist1 = V1.coords - V0.coords;
     Vect dist2 = V2.coords - V0.coords;
-    Vect crossProduct = Tools::cross(dist1, dist2);
+    Vect crossProduct = Tools::cross(dist2, dist1);
     return Tools::normalize(crossProduct);
 }
 
@@ -50,9 +50,27 @@ void DataStructure::update_normals() {
     update_vertices_normals();
 }
 
+void DataStructure::compute_topology_neighbours(int k) {
+    for (int i = 0; i < faces.size(); i++) {
+        vertices[faces[i].verticesId[0]].neighbours.insert(faces[i].verticesId[1]);
+        vertices[faces[i].verticesId[0]].neighbours.insert(faces[i].verticesId[2]);
+
+        vertices[faces[i].verticesId[1]].neighbours.insert(faces[i].verticesId[0]);
+        vertices[faces[i].verticesId[1]].neighbours.insert(faces[i].verticesId[2]);
+
+        vertices[faces[i].verticesId[2]].neighbours.insert(faces[i].verticesId[0]);
+        vertices[faces[i].verticesId[2]].neighbours.insert(faces[i].verticesId[1]);
+    }
+}
+
 void DataStructure::display_vertices() {
     int nb_vertices = vertices.size();
     for (int i = 0; i < nb_vertices; i++) {
+        std::cout << "Vertices n°" << i << std::endl;
         std::cout << vertices[i].coords.x<<" " <<vertices[i].coords.y<<" "<<vertices[i].coords.z<<std::endl;
+        for (auto itr = vertices[i].neighbours.begin(); itr != vertices[i].neighbours.end(); ++itr) {
+            std::cout << *itr;
+        }
+        std::cout << std::endl;
     }
 }

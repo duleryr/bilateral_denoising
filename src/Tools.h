@@ -29,11 +29,11 @@ public:
 
     static double average(std::vector<double> vect) {
         double result = 0.0;
-	for (int i = 0; i < vect.size(); i++) {
-	    result += vect[i];
-	}
-	result = result/vect.size();
-	return result;
+        for (uint i = 0; i < vect.size(); i++) {
+            result += vect[i];
+        }
+        result /= vect.size();
+        return result;
     }
 };
 
