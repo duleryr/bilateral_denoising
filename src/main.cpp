@@ -11,8 +11,8 @@
 #include "Data_structure.h"
 #include "file_stream.h"
 
-#define DEBUG_DISTANCES true
-#define SHOW_RESULT true
+#define DEBUG_DISTANCES false
+#define SHOW_RESULT false
 
 double compute_sigma_c(std::string type, Vertex V, std::vector<Point> vertices_coords_cpy) {
     if (type == "MoyDistVois") {
@@ -59,29 +59,35 @@ void denoise_point(Vertex & V, double rau, std::vector<Point> coords_cpy, double
         std::cout << "Neighboorhood[i]";
         neighborhood[i].print();
         Point dist = V.coords - neighborhood[i];
-        double t = Tools::calcNorm(dist);
-        std::cout << "V.normal = ";
-        V.normal.print();
-        std::cout << "V - Qi = ";
-        dist.print();
         double h = Tools::dot(V.normal, dist);
-        std::cout << "h = " << h << std::endl;
+        double t = Tools::calcNorm(dist);
+
+        if (DEBUG_DISTANCES) {
+            std::cout << "V.normal = ";
+            V.normal.print();
+            std::cout << "V - Qi = ";
+            dist.print();
+            std::cout << "h = " << h << std::endl;
+        }
+
         double w_c = exp((-t*t)/(2*sigma_c*sigma_c));
         double w_s = exp((-h*h)/(2*sigma_s*sigma_s));
         sum += (w_c * w_s) * h;
         normalizer += w_c * w_s;
     }
-    std::cout << "Before" << std::endl;
-    V.coords.print();
-    std::cout << "Normal = " << std::endl;
-    V.normal.print();
-    std::cout << "Sum = " << sum << std::endl;
-    std::cout << "Normalizer = " << normalizer << std::endl;
-    std::cout << "Sum / normalizer = " << sum / normalizer << std::endl;
-    V.coords += V.normal * (sum / normalizer);
-    std::cout << "After" << std::endl;
-    V.coords.print();
-    std::cout << std::endl;
+    if (DEBUG_DISTANCES) {
+        std::cout << "Before" << std::endl;
+        V.coords.print();
+        std::cout << "Normal = " << std::endl;
+        V.normal.print();
+        std::cout << "Sum = " << sum << std::endl;
+        std::cout << "Normalizer = " << normalizer << std::endl;
+        std::cout << "Sum / normalizer = " << sum / normalizer << std::endl;
+        V.coords += V.normal * (sum / normalizer);
+        std::cout << "After" << std::endl;
+        V.coords.print();
+        std::cout << std::endl;
+    }
 }
 
 int main(int argc, char **argv) 
@@ -108,8 +114,6 @@ int main(int argc, char **argv)
     filename = filename.substr(0,found);
     std::cout << filename << std::endl;
 
-    std::string output_filename = "OFF_Files_Denoised/" + filename + ".off";
-
     /* Structure de données principale */
     DataStructure data = File_stream::parse_file_off(input_file); 
     data.compute_topology_neighbours(1);
@@ -127,7 +131,7 @@ int main(int argc, char **argv)
     data.display_vertices();
     std::cout << "-----------------------------------------" << std::endl;
 
-    int nb_iter = 1;
+    int nb_iter = 3;
     for (int j = 0; j < nb_iter; j++) {
         for (uint i = 0; i < data.vertices.size(); i++) {
             sigma_c = compute_sigma_c(calc_sigma_c, data.vertices[i], vertices_coords_cpy);
@@ -149,8 +153,10 @@ int main(int argc, char **argv)
         data.display_vertices();
     }
 
+    std::string output_filename = "OFF_Files_Denoised/" + filename + "_" + std::to_string(nb_iter) + "_" + std::to_string(sigma_s) + ".off";
+
     /* Ecriture dans le fichier de sortie */
-    File_stream::write_file_off(output_filename + calc_sigma_c, data);
+    File_stream::write_file_off(output_filename, data);
 
     return 0;
 }
