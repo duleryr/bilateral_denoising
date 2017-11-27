@@ -26,6 +26,15 @@ public:
     static double dot(Point V1, Point V2) {
         return V1.x*V2.x + V1.y*V2.y + V1.z*V2.z;
     }
+
+    static double average(std::vector<double> vect) {
+        double result = 0.0;
+	for (int i = 0; i < vect.size(); i++) {
+	    result += vect[i];
+	}
+	result = result/vect.size();
+	return result;
+    }
 };
 
 #endif

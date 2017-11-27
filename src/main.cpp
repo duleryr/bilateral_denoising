@@ -10,6 +10,18 @@
 #include "Data_structure.h"
 #include "file_stream.h"
 
+int compute_neighborhood_radius(Vertex V, const DataStructure data) {
+    std::vector<double> distance;
+    for (int i = 0; i < data.vertices.size(); i++) {
+        if (vertices[i].IsAdjacentTo(V)) {
+	    double dist = Tools::calcNorm(vertices[i] - V);
+	    distance.push_back(dist);
+        }
+    }
+    double average = Tools::average(distance);
+    return average;
+}
+
 std::vector<Vertex> compute_neighborhood(Vertex V, double rau, const DataStructure data) {
     std::vector<Vertex> neighborhood;
     for (uint i = 0; i < data.vertices.size(); i++) {
@@ -44,8 +56,8 @@ int main(int argc, char **argv)
 {
     std::string input_file;
 
-    double sigma_s = 1.5;
-    double sigma_c = 2;
+    double sigma_s = 1;
+    double sigma_c = 1;
 
     if (argc >= 2) {
         if (argc == 4) {
