@@ -98,6 +98,7 @@ void denoise_point(Vertex & V, double rau, std::vector<Point> coords_cpy, double
         sum += (w_c * w_s) * h;
         normalizer += w_c * w_s;
     }
+    V.coords += V.normal * (sum / normalizer);
     if (DEBUG_DISTANCES) {
         std::cout << "Before" << std::endl;
         V.coords.print();
@@ -130,7 +131,7 @@ int main(int argc, char **argv)
         std::cin >> input_file;
     }
 
-    std::size_t found = input_file.find_last_of("/");
+     std::size_t found = input_file.find_last_of("/");
     std::string filename = input_file.substr(found+1);
     std::cout << filename << std::endl;
     found = filename.find_last_of(".");
