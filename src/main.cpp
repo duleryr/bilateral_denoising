@@ -98,7 +98,7 @@ void denoise_point(Vertex & V, double rau, std::vector<Point> coords_cpy, double
         sum += (w_c * w_s) * h;
         normalizer += w_c * w_s;
     }
-    V.coords += V.normal * (sum / normalizer);
+    V.coords -= V.normal * (sum / normalizer);
     if (DEBUG_DISTANCES) {
         std::cout << "Before" << std::endl;
         V.coords.print();
@@ -121,9 +121,11 @@ int main(int argc, char **argv)
     double sigma_s = 1;
     double sigma_c = 1;
 
+    int nb_iter = 3;
+
     if (argc >= 2) {
         if (argc == 3) {
-            sigma_s = std::stod(argv[2]);
+            nb_iter = std::stoi(argv[2]);
         }
         input_file = argv[1];
     } else {
@@ -131,7 +133,7 @@ int main(int argc, char **argv)
         std::cin >> input_file;
     }
 
-     std::size_t found = input_file.find_last_of("/");
+    std::size_t found = input_file.find_last_of("/");
     std::string filename = input_file.substr(found+1);
     std::cout << filename << std::endl;
     found = filename.find_last_of(".");
@@ -155,11 +157,10 @@ int main(int argc, char **argv)
     data.display_vertices();
     std::cout << "-----------------------------------------" << std::endl;
 
-    int nb_iter = 3;
     for (int j = 0; j < nb_iter; j++) {
         for (uint i = 0; i < data.vertices.size(); i++) {
             sigma_c = compute_sigma_c(calc_sigma, data.vertices[i], vertices_coords_cpy);
-	    sigma_s = compute_sigma_s(calc_sigma, data.vertices[i], vertices_coords_cpy);
+            sigma_s = compute_sigma_s(calc_sigma, data.vertices[i], vertices_coords_cpy);
             if (DEBUG_DISTANCES) {
                 std::cout << "sigma_c = " << sigma_c << std::endl;
             }
