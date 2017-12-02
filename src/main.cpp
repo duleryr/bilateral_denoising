@@ -122,10 +122,14 @@ int main(int argc, char **argv)
     double sigma_c = 1;
 
     int nb_iter = 3;
+    int neighborhoodSize = 1;
 
     if (argc >= 2) {
-        if (argc == 3) {
+        if (argc >= 3) {
             nb_iter = std::stoi(argv[2]);
+        }
+        if (argc == 4) {
+            neighborhoodSize = std::stoi(argv[3]);
         }
         input_file = argv[1];
     } else {
@@ -142,7 +146,7 @@ int main(int argc, char **argv)
 
     /* Structure de données principale */
     DataStructure data = File_stream::parse_file_off(input_file); 
-    data.compute_topology_neighbours(1);
+    data.compute_topology_neighbours(neighborhoodSize);
     data.update_normals();
 
     std::vector<Point> vertices_coords_cpy;
@@ -179,7 +183,7 @@ int main(int argc, char **argv)
         data.display_vertices();
     }
 
-    std::string output_filename = "OFF_Files_Denoised/" + filename + "_" + std::to_string(nb_iter) + "_" + std::to_string(sigma_s) + ".off";
+    std::string output_filename = "OFF_Files_Denoised/" + filename + "_" + std::to_string(nb_iter) + "_" + std::to_string(neighborhoodSize) + ".off";
 
     /* Ecriture dans le fichier de sortie */
     File_stream::write_file_off(output_filename, data);
