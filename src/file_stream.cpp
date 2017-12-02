@@ -29,6 +29,7 @@ DataStructure File_stream::parse_file_off(std::string filename) {
         fichier >> S.coords.x;
         fichier >> S.coords.y;
         fichier >> S.coords.z;
+        S.neighbours.insert(i);
         tableau_sommets.push_back(S);           
     }
 

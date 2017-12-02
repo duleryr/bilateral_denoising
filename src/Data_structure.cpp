@@ -51,15 +51,20 @@ void DataStructure::update_normals() {
 }
 
 void DataStructure::compute_topology_neighbours(int k) {
-    for (uint i = 0; i < faces.size(); i++) {
-        vertices[faces[i].verticesId[0]].neighbours.insert(faces[i].verticesId[1]);
-        vertices[faces[i].verticesId[0]].neighbours.insert(faces[i].verticesId[2]);
+    for (int n = 0; n < k; n++) {
+        for (uint i = 0; i < faces.size(); i++) {
+            Vertex v0 = vertices[faces[i].verticesId[0]];
+            Vertex v1 = vertices[faces[i].verticesId[1]];
+            Vertex v2 = vertices[faces[i].verticesId[2]];
+            v0.neighbours.insert(v1.neighbours.begin(), v1.neighbours.end());
+            v0.neighbours.insert(v2.neighbours.begin(), v2.neighbours.end());
 
-        vertices[faces[i].verticesId[1]].neighbours.insert(faces[i].verticesId[0]);
-        vertices[faces[i].verticesId[1]].neighbours.insert(faces[i].verticesId[2]);
+            v1.neighbours.insert(v0.neighbours.begin(), v0.neighbours.end());
+            v1.neighbours.insert(v2.neighbours.begin(), v2.neighbours.end());
 
-        vertices[faces[i].verticesId[2]].neighbours.insert(faces[i].verticesId[0]);
-        vertices[faces[i].verticesId[2]].neighbours.insert(faces[i].verticesId[1]);
+            v2.neighbours.insert(v0.neighbours.begin(), v0.neighbours.end());
+            v2.neighbours.insert(v1.neighbours.begin(), v1.neighbours.end());
+        }
     }
 }
 

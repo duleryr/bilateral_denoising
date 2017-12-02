@@ -135,10 +135,10 @@ int main(int argc, char **argv)
 
     std::size_t found = input_file.find_last_of("/");
     std::string filename = input_file.substr(found+1);
-    std::cout << filename << std::endl;
+    //std::cout << filename << std::endl;
     found = filename.find_last_of(".");
     filename = filename.substr(0,found);
-    std::cout << filename << std::endl;
+    //std::cout << filename << std::endl;
 
     /* Structure de données principale */
     DataStructure data = File_stream::parse_file_off(input_file); 
@@ -153,9 +153,9 @@ int main(int argc, char **argv)
 
     std::string calc_sigma = "MoyDistVois";
 
-    std::cout << "-----------------------------------------" << std::endl;
-    data.display_vertices();
-    std::cout << "-----------------------------------------" << std::endl;
+    //std::cout << "-----------------------------------------" << std::endl;
+    //data.display_vertices();
+    //std::cout << "-----------------------------------------" << std::endl;
 
     for (int j = 0; j < nb_iter; j++) {
         for (uint i = 0; i < data.vertices.size(); i++) {
