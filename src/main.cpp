@@ -31,7 +31,9 @@ double compute_sigma_c(std::string type, Vertex V, std::vector<Point> vertices_c
             }
             distance.push_back(dist);
         }
-        std::cout << std::endl;
+        if (DEBUG_DISTANCES) {
+            std::cout << std::endl;
+        }
         return Tools::average(distance);
     }
     return 0.0;
@@ -54,7 +56,9 @@ double compute_sigma_s(std::string type, Vertex V, std::vector<Point> vertices_c
             }
             distance.push_back(dist);
         }
-        std::cout << std::endl;
+        if (DEBUG_DISTANCES) {
+            std::cout << std::endl;
+        }
         return Tools::standard_deviation(distance);
     }
     return 0.0;
@@ -79,8 +83,6 @@ void denoise_point(Vertex & V, double rau, std::vector<Point> coords_cpy, double
     double sum = 0;
     double normalizer = 0;
     for (int i = 0; i < K; i++) {
-        std::cout << "Neighboorhood[i]";
-        neighborhood[i].print();
         Point dist = V.coords - neighborhood[i];
         double h = Tools::dot(V.normal, dist);
         double t = Tools::calcNorm(dist);
@@ -146,6 +148,7 @@ int main(int argc, char **argv)
 
     /* Structure de données principale */
     DataStructure data = File_stream::parse_file_off(input_file); 
+    std::cout << "file parsed : " << filename << std::endl;
     data.compute_topology_neighbours(neighborhoodSize);
     data.update_normals();
 

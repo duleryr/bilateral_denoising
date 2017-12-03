@@ -1,6 +1,7 @@
 #include "Data_structure.h"
 #include <vector>
 #include <iostream>
+#include <unordered_set>
 #include "Vertex.h"
 #include "Face.h"
 #include "Tools.h"
@@ -51,19 +52,28 @@ void DataStructure::update_normals() {
 }
 
 void DataStructure::compute_topology_neighbours(int k) {
+    std::vector<std::unordered_set<int>> listNeighbours_cpy;
+    for (uint i = 0; i < vertices.size(); i++) {
+        listNeighbours_cpy.push_back(vertices[i].neighbours);
+    }
+
     for (int n = 0; n < k; n++) {
         for (uint i = 0; i < faces.size(); i++) {
-            Vertex v0 = vertices[faces[i].verticesId[0]];
-            Vertex v1 = vertices[faces[i].verticesId[1]];
-            Vertex v2 = vertices[faces[i].verticesId[2]];
-            v0.neighbours.insert(v1.neighbours.begin(), v1.neighbours.end());
-            v0.neighbours.insert(v2.neighbours.begin(), v2.neighbours.end());
-
-            v1.neighbours.insert(v0.neighbours.begin(), v0.neighbours.end());
-            v1.neighbours.insert(v2.neighbours.begin(), v2.neighbours.end());
-
-            v2.neighbours.insert(v0.neighbours.begin(), v0.neighbours.end());
-            v2.neighbours.insert(v1.neighbours.begin(), v1.neighbours.end());
+            for (auto itr = listNeighbours_cpy[faces[i].verticesId[0]].begin(); itr != listNeighbours_cpy[faces[i].verticesId[0]].end(); ++itr) {
+                vertices[faces[i].verticesId[1]].neighbours.insert(*itr);
+                vertices[faces[i].verticesId[2]].neighbours.insert(*itr);
+            }
+            for (auto itr = listNeighbours_cpy[faces[i].verticesId[1]].begin(); itr != listNeighbours_cpy[faces[i].verticesId[1]].end(); ++itr) {
+                vertices[faces[i].verticesId[0]].neighbours.insert(*itr);
+                vertices[faces[i].verticesId[2]].neighbours.insert(*itr);
+            }
+            for (auto itr = listNeighbours_cpy[faces[i].verticesId[2]].begin(); itr != listNeighbours_cpy[faces[i].verticesId[2]].end(); ++itr) {
+                vertices[faces[i].verticesId[0]].neighbours.insert(*itr);
+                vertices[faces[i].verticesId[1]].neighbours.insert(*itr);
+            }
+        }
+        for (uint i = 0; i < vertices.size(); i++) {
+            listNeighbours_cpy[i] = vertices[i].neighbours;
         }
     }
 }
