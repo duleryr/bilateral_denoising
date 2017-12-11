@@ -7,6 +7,7 @@
 #include "Vertex.h"
 #include "Face.h"
 
+// Parseur du fichier d'entrée, retourne un objet DataStructure
 DataStructure File_stream::parse_file_off(std::string filename) {
     std::ifstream fichier(filename.c_str(), std::ios::in);
     if(!fichier) {
@@ -47,6 +48,7 @@ DataStructure File_stream::parse_file_off(std::string filename) {
     return DataStructure(tableau_sommets, tableau_faces);
 }
 
+// Ecriture de la DataStructure dans le fichier de sortie
 void File_stream::write_file_off(std::string filename, DataStructure data) {
     std::ofstream fichier(filename.c_str(), std::ios::out | std::ios::trunc);
     if(!fichier) {

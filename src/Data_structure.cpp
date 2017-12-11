@@ -12,6 +12,7 @@ DataStructure::DataStructure(std::vector<Vertex> list_vertices, std::vector<Face
     faces = list_faces;
 }
 
+// Calcul de la normale d'une face
 Vect DataStructure::compute_face_normal(int face_id) {
     Face F = faces[face_id];
     Vertex V0 = vertices[F.verticesId[0]];
@@ -23,6 +24,7 @@ Vect DataStructure::compute_face_normal(int face_id) {
     return Tools::normalize(crossProduct);
 }
 
+// Met à jour les normales des sommets (en recalculant les normales des faces)
 void DataStructure::update_vertices_normals() {
     int nb_sommets = vertices.size();
     int nb_faces = faces.size();
@@ -47,10 +49,13 @@ void DataStructure::update_vertices_normals() {
     }
 }
 
+// Mise à jour des normales des sommets 
+// (originellement prévu pour mettre à jour les normales des faces et des sommets)
 void DataStructure::update_normals() {
     update_vertices_normals();
 }
 
+// Calcul le k-voisinage topologique de chaque sommet
 void DataStructure::compute_topology_neighbours(int k) {
     std::vector<std::unordered_set<int>> listNeighbours_cpy;
     for (uint i = 0; i < vertices.size(); i++) {
@@ -78,6 +83,7 @@ void DataStructure::compute_topology_neighbours(int k) {
     }
 }
 
+// Pour le débug
 void DataStructure::display_vertices() {
     int nb_vertices = vertices.size();
     for (int i = 0; i < nb_vertices; i++) {
