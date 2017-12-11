@@ -14,6 +14,7 @@
 #define DEBUG_DISTANCES false
 #define SHOW_RESULT false
 
+//calcul de sigma_c pour chaque sommet
 double compute_sigma_c(std::string type, Vertex V, std::vector<Point> vertices_coords_cpy) {
     if (type == "MoyDistVois") {
         std::vector<double> distance;
@@ -21,6 +22,7 @@ double compute_sigma_c(std::string type, Vertex V, std::vector<Point> vertices_c
             std::cout << "------- Distances ------- " << std::endl;
         }
         for (auto itr = V.neighbours.begin(); itr != V.neighbours.end(); ++itr) {
+	    //calcule de la distance entre le sommet considéré et chacun de ses k-voisins
             double dist = Tools::calcNorm(V.coords - vertices_coords_cpy[*itr]);
             if (DEBUG_DISTANCES) {
                 std::cout << "Voisin";
@@ -34,11 +36,13 @@ double compute_sigma_c(std::string type, Vertex V, std::vector<Point> vertices_c
         if (DEBUG_DISTANCES) {
             std::cout << std::endl;
         }
+	//sigma_c est la moyenne de toutes ces distances
         return Tools::average(distance);
     }
     return 0.0;
 }
 
+//calcul de sigma_s pour chaque sommet
 double compute_sigma_s(std::string type, Vertex V, std::vector<Point> vertices_coords_cpy) {
     if (type == "MoyDistVois") {
         std::vector<double> distance;
@@ -46,6 +50,7 @@ double compute_sigma_s(std::string type, Vertex V, std::vector<Point> vertices_c
             std::cout << "------- Distances ------- " << std::endl;
         }
         for (auto itr = V.neighbours.begin(); itr != V.neighbours.end(); ++itr) {
+	    //calcule de la distance entre le sommet considéré et chacun de ses k-voisins
             double dist = Tools::calcNorm(V.coords - vertices_coords_cpy[*itr]);
             if (DEBUG_DISTANCES) {
                 std::cout << "Voisin";
@@ -59,11 +64,13 @@ double compute_sigma_s(std::string type, Vertex V, std::vector<Point> vertices_c
         if (DEBUG_DISTANCES) {
             std::cout << std::endl;
         }
+	//sigma_s est l'écart type de toutes ces distances
         return Tools::standard_deviation(distance);
     }
     return 0.0;
 }
 
+//recherche l'ensemble des sommets d'une distance inférieure à rau avec le sommet considéré
 std::vector<Point> compute_distance_neighborhood(Vertex V, double rau, const std::vector<Point> coords_cpy) {
     std::vector<Point> neighborhood;
     for (uint i = 0; i < coords_cpy.size(); i++) {
@@ -77,7 +84,9 @@ std::vector<Point> compute_distance_neighborhood(Vertex V, double rau, const std
     return neighborhood;
 }
 
+//débruitage d'un sommet
 void denoise_point(Vertex & V, double rau, std::vector<Point> coords_cpy, double sigma_c, double sigma_s) {
+    //recherche l'ensemble des sommets d'une distance inférieure à rau avec le sommet considéré
     std::vector<Point> neighborhood = compute_distance_neighborhood(V, rau, coords_cpy);
     int K = neighborhood.size();
     double sum = 0;
@@ -100,6 +109,7 @@ void denoise_point(Vertex & V, double rau, std::vector<Point> coords_cpy, double
         sum += (w_c * w_s) * h;
         normalizer += w_c * w_s;
     }
+    //on se déplace selon la normale au sommet
     V.coords -= V.normal * (sum / normalizer);
     if (DEBUG_DISTANCES) {
         std::cout << "Before" << std::endl;
@@ -128,9 +138,11 @@ int main(int argc, char **argv)
 
     if (argc >= 2) {
         if (argc >= 3) {
+            //possibilité pour l'utilisateur de définir le nombre d'itérations
             nb_iter = std::stoi(argv[2]);
         }
         if (argc == 4) {
+	    //possibilité pour l'utilisateur de définir le k voisinage topologique
             neighborhoodSize = std::stoi(argv[3]);
         }
         input_file = argv[1];
@@ -147,11 +159,15 @@ int main(int argc, char **argv)
     //std::cout << filename << std::endl;
 
     /* Structure de données principale */
+    //parsage du fichier d'entrée et instanciation de la structure de données
     DataStructure data = File_stream::parse_file_off(input_file); 
     std::cout << "file parsed : " << filename << std::endl;
+    // calcule le voisinage topologique pour chaque sommet.
     data.compute_topology_neighbours(neighborhoodSize);
+    //calcule la normale en chaque sommet
     data.update_normals();
 
+    //crée un tableau de sommets qui copie notre tableau de sommets de manière à ne modifier la structure qu'après chaque itération
     std::vector<Point> vertices_coords_cpy;
 
     for (uint i = 0; i < data.vertices.size(); i++) {
@@ -166,12 +182,14 @@ int main(int argc, char **argv)
 
     for (int j = 0; j < nb_iter; j++) {
         for (uint i = 0; i < data.vertices.size(); i++) {
+	    //calcul de  sigma_c et sigma_s selon les paramètres définis par l'utilisateur
             sigma_c = compute_sigma_c(calc_sigma, data.vertices[i], vertices_coords_cpy);
             sigma_s = compute_sigma_s(calc_sigma, data.vertices[i], vertices_coords_cpy);
             if (DEBUG_DISTANCES) {
                 std::cout << "sigma_c = " << sigma_c << std::endl;
             }
             double rau = 2*sigma_c;
+	    //débruitage d'un sommet
             denoise_point(data.vertices[i], rau, vertices_coords_cpy, sigma_c, sigma_s);
         }
         data.update_normals();
