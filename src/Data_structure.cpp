@@ -34,18 +34,11 @@ void DataStructure::update_vertices_normals() {
         normales_faces.push_back(normal);
     }
     for (int i = 0; i < nb_sommets; i++) {
-        Vertex V = vertices[i];
-        V.normal = Point();
-        for (int j = 0; j < nb_faces; j++) {
-            Face F = faces[j];
-            Vertex V0 = vertices[F.verticesId[0]];
-            Vertex V1 = vertices[F.verticesId[1]];
-            Vertex V2 = vertices[F.verticesId[2]];
-            if ((V == V0) || (V == V1) || (V == V2)) {
-                V.normal += normales_faces[j];
-            } 
+        vertices[i].normal = Point();
+        for (int j = 0; j < vertices[i].related_faces.size(); j++) {
+            vertices[i].normal += normales_faces[j];
         }
-        vertices[i].normal = Tools::normalize(V.normal);
+        vertices[i].normal = Tools::normalize(vertices[i].normal);
     }
 }
 

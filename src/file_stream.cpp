@@ -42,6 +42,9 @@ DataStructure File_stream::parse_file_off(std::string filename) {
         fichier >> F.verticesId[0];
         fichier >> F.verticesId[1];
         fichier >> F.verticesId[2];
+        tableau_sommets[F.verticesId[0]].related_faces.push_back(i);
+        tableau_sommets[F.verticesId[1]].related_faces.push_back(i);
+        tableau_sommets[F.verticesId[2]].related_faces.push_back(i);
         tableau_faces.push_back(F);
     }
 
