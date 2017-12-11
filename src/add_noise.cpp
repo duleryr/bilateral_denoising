@@ -25,12 +25,15 @@ double calcul_deviation(std::vector<double>& tab, int size) {
     return deviation;
 } 
 
+//génère un bruit gaussien pour la table tab
 void gaussian_noise(double mean, double deviation, std::vector<double>& tab, int size) {
     srand(time(NULL));
     std::default_random_engine generator;
+    //génère une distribution gaussienne
     std::normal_distribution<double> distribution(mean, deviation);
     for (int i = 0; i < size; i++) {
         double noise = distribution(generator);
+	//affecte du bruit à chaque élément de la table
         tab[i] += noise;
     }
 }
@@ -39,10 +42,12 @@ double frand(double a, double b){
     return ( rand()/(double)RAND_MAX ) * (b-a) + a;
 }
 
+//génère un bruit aléatoire pour la table tab
 void random_noise(double first_value, double amplitude ,std::vector<double>& tab, int size) {
     srand(time(NULL));
     for (int i = 0; i < size; i++) {
         double noise = frand(first_value, amplitude);
+	//affecte du bruit à chaque élément de la table
         tab[i] += noise;
     }
 }
@@ -60,13 +65,16 @@ int main(int argc, char **argv) {
     }
 
     std::string input_filename = "OFF_Files/" + filename + ".off";
+    //parse le fichier d'entrée et initialise la structure de données
     DataStructure DataStruct = File_stream::parse_file_off(input_filename);
     int nb_vertices = DataStruct.vertices.size();
+    //crée trois tableaux de coordonnées pour les coordonnées x, y et z
     std::vector< std::vector<double>> tab_coord;
     tab_coord.push_back(std::vector<double>(nb_vertices));
     tab_coord.push_back(std::vector<double>(nb_vertices));
     tab_coord.push_back(std::vector<double>(nb_vertices));
     for (int i = 0; i < nb_vertices; i++) {
+        //affecte les tableaux de coordonnées
         tab_coord[0][i] = DataStruct.vertices[i].coords.x;
         tab_coord[1][i] = DataStruct.vertices[i].coords.y;
         tab_coord[2][i] = DataStruct.vertices[i].coords.z;
@@ -77,6 +85,7 @@ int main(int argc, char **argv) {
     std::cin >> noisename;
 
     if (noisename == "gaussien") {
+        //tableau d'écart type selon chaque composante
         double deviation[3];
         for (int i = 0; i < 3; i++) {
             std::cout<< "indiquez l'écart type de la composante "<<i<<"\n";
@@ -84,6 +93,7 @@ int main(int argc, char **argv) {
             gaussian_noise(0, deviation[i], tab_coord[i], nb_vertices);
         }
     } else if (noisename == "aleatoire") {
+        //tableau d'amplitude selon chaque composante
         double amplitude[3];
         for (int i = 0; i < 3; i++) {
             std::cout<<"indiquez l'amplitude de la première composante: \n";
@@ -94,6 +104,7 @@ int main(int argc, char **argv) {
         std::cout<< "bruit non valide"<< std::endl;
     }
 
+    //modifie la structure de données
     for (int i = 0; i < nb_vertices; i++) {
         DataStruct.vertices[i].coords.x = tab_coord[0][i];
         DataStruct.vertices[i].coords.y = tab_coord[1][i];
