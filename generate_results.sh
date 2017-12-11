@@ -1,13 +1,11 @@
 #!/bin/bash
 
-for file in OFF_Files_Noised/*.off
+for nb_iter in 1 3 5
 do
-    for nb_iter in 1 2 4 5
+    for neighboorhoodSize in 1 3
     do
-        for neighboorhoodSize in 1 2 3
-        do
-            ./main "$file" "$nb_iter" "$neighboorhoodSize"
-            echo "file : $file, nb_iter = $nb_iter, neighboorhoodSize = $neighboorhoodSize, done"
-        done
+        echo "file : bone_gaussien.off, nb_iter = $nb_iter, neighboorhoodSize = $neighboorhoodSize"
+        ./main "OFF_Files_Noised/bone_gaussien.off" "$nb_iter" "$neighboorhoodSize"
+        echo "done"
     done
 done
