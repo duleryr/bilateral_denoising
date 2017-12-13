@@ -164,8 +164,10 @@ int main(int argc, char **argv)
     std::cout << "file parsed : " << filename << std::endl;
     // calcule le voisinage topologique pour chaque sommet.
     data.compute_topology_neighbours(neighborhoodSize);
+    std::cout<<"a"<<std::endl;
     //calcule la normale en chaque sommet
     data.update_normals();
+    std::cout<<"b"<<std::endl;
 
     //crée un tableau de sommets qui copie notre tableau de sommets de manière à ne modifier la structure qu'après chaque itération
     std::vector<Point> vertices_coords_cpy;
