@@ -1,0 +1,13 @@
+L'ajout se bruit se fait via add_noise :
+
+make add_noise
+./add_noise bear
+choisir gaussien ou aléatoire, et les paramètres adéquats
+
+Le débruitage se fait via le main :
+
+make
+./main "Fichier OFF à débruiter" "nombre d'itération" "nombre k à utiliser pour le k-voisinage"
+
+Les fichiers débruités se trouvent dans le répertoire OFF_Files_Denoised
+Quelques fichiers bruités sont disponibles dans le répertoire OFF_Files_Noised

@@ -15,10 +15,7 @@ add_noise:
 debug:
 	$(CXX) $(CSOURCE) $(CXXFLAGS) -g -pg $(CSMAIN) -o $@ 
 
-doc:
-	pdflatex -output-directory=Documentation/ Documentation/rapport.tex
-
-all: $(PROG) debug doc add_noise
+all: $(PROG) debug add_noise
 
 clean :
 	rm -f ./main
@@ -30,4 +27,4 @@ clean :
 	rm -f Documentation/rapport.pdf
 	rm -f Output_Files/*.txt
 
-.PHONY: all debug test clean 
+.PHONY: all debug clean 
