@@ -35,7 +35,7 @@ void DataStructure::update_vertices_normals() {
     }
     for (int i = 0; i < nb_sommets; i++) {
         vertices[i].normal = Point();
-        for (int j = 0; j < vertices[i].related_faces.size(); j++) {
+        for (uint j = 0; j < vertices[i].related_faces.size(); j++) {
             vertices[i].normal += normales_faces[vertices[i].related_faces[j]];
         }
         vertices[i].normal = Tools::normalize(vertices[i].normal);

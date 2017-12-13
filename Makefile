@@ -21,10 +21,5 @@ clean :
 	rm -f ./main
 	rm -f ./debug
 	rm -f ./add_noise
-	rm -f Documentation/rapport.aux
-	rm -f Documentation/rapport.log
-	rm -f Documentation/rapport.dvi
-	rm -f Documentation/rapport.pdf
-	rm -f Output_Files/*.txt
 
 .PHONY: all debug clean 
